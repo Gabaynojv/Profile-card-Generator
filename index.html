@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Card Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      display: flex;
+      gap: 30px;
+    }
+    .input-section { flex: 1; }
+    .preview-section { flex: 1; }
+    h1 { color: #333; }
+    .form-group { margin-bottom: 15px; }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    textarea { height: 80px; }
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #45a049; }
+    .profile-card {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .profile-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .profile-job-title {
+      margin-bottom: 10px;
+      color: #666;
+    }
+    .profile-bio {
+      margin-bottom: 15px;
+      color: #666;
+    }
+    .like-button {
+      background-color: #ffeaea;
+      color: #e74c3c;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 10px;
+      transition: 0.2s;
+    }
+    .like-button:hover { background-color: #ffcccc; }
+    .likes-count {
+      color: #666;
+      font-size: 0.9em;
+    }
+    .real-time-preview { margin-top: 20px; }
+    .real-time-preview h3 { margin-top: 0; }
+  </style>
+</head>
+<body>
+  <h1>Profile Card Generator</h1>
+  <div class="container">
+    <!-- Input Section -->
+    <div class="input-section">
+      <h2>Enter Your Information</h2>
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+      </div>
+      <div class="form-group">
+        <label for="jobTitle">Job Title:</label>
+        <input type="text" id="jobTitle" placeholder="Enter your job title">
+      </div>
+      <div class="form-group">
+        <label for="bio">Bio:</label>
+        <textarea id="bio" placeholder="Enter your bio"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="color">Favorite Color:</label>
+        <input type="color" id="color" value="#4CAF50">
+      </div>
+      <button id="generateBtn">Generate Profile Card</button>
+
+      <div class="real-time-preview">
+        <h3>Real-Time Preview</h3>
+        <p><strong>Name:</strong> <span id="previewName">—</span></p>
+        <p><strong>Job:</strong> <span id="previewJob">—</span></p>
+      </div>
+    </div>
+
+   
+    <div class="preview-section">
+      <h2>Your Profile Card</h2>
+      <div class="profile-card" id="profileCard">
+        <div class="profile-name"></div>
+        <div class="profile-job-title"></div>
+        <div class="profile-bio"></div>
+        <button class="like-button" id="likeBtn"><span>❤️</span> Like</button>
+        <div class="likes-count" id="likesCount">1 like</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+   
+    const nameInput = document.getElementById('name');
+    const jobTitleInput = document.getElementById('jobTitle');
+    const bioInput = document.getElementById('bio');
+    const colorInput = document.getElementById('color');
+    const generateBtn = document.getElementById('generateBtn');
+    const profileCard = document.getElementById('profileCard');
+    const likeBtn = document.getElementById('likeBtn');
+    const likesCount = document.getElementById('likesCount');
+    const previewName = document.getElementById('previewName');
+    const previewJob = document.getElementById('previewJob');
+
+    
+    let likeCount = 1;
+
+  
+    function generateProfileCard() {
+      const name = nameInput.value.trim();
+      const jobTitle = jobTitleInput.value.trim();
+      const bio = bioInput.value.trim();
+      const color = colorInput.value;
+
+      
+      const nameEl = profileCard.querySelector('.profile-name');
+      const jobEl = profileCard.querySelector('.profile-job-title');
+      const bioEl = profileCard.querySelector('.profile-bio');
+
+      nameEl.textContent = name;
+      nameEl.style.display = name ? 'block' : 'none';
+
+      jobEl.textContent = jobTitle;
+      jobEl.style.display = jobTitle ? 'block' : 'none';
+
+      bioEl.textContent = bio;
+      bioEl.style.display = bio ? 'block' : 'none';
+
+     
+      profileCard.style.borderColor = color;
+      profileCard.style.backgroundColor = '#ffffff';
+      profileCard.style.boxShadow = `0 2px 8px ${color}`; 
+
+      
+      likeCount = 1;
+      likesCount.textContent = `${likeCount} like`;  
+
+     
+      previewName.textContent = name || "—";
+      previewJob.textContent = jobTitle || "—";
+    }
+
+   
+    generateBtn.addEventListener('click', generateProfileCard);
+
+   
+    generateProfileCard();
+
+   
+    likeBtn.addEventListener('click', () => {
+      likeCount++;
+      likesCount.textContent = `${likeCount} like${likeCount === 1 ? '' : 's'}`;  
+
+      likeBtn.style.backgroundColor = '#e74c3c';
+      likeBtn.style.color = 'white';
+
+      setTimeout(() => {
+        likeBtn.style.backgroundColor = '#ffeaea';
+        likeBtn.style.color = '#e74c3c';
+      }, 200);
+    });
+
+   
+    nameInput.addEventListener('input', () => {
+      previewName.textContent = nameInput.value.trim() || "—";
+    });
+    jobTitleInput.addEventListener('input', () => {
+      previewJob.textContent = jobTitleInput.value.trim() || "—";
+    });
+  </script>
+</body>
+</html>
